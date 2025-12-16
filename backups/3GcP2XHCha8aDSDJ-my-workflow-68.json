@@ -1,0 +1,153 @@
+{
+  "updatedAt": "2025-09-29T09:45:27.000Z",
+  "createdAt": "2025-09-29T09:36:11.886Z",
+  "id": "3GcP2XHCha8aDSDJ",
+  "name": "My workflow 68",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4949ca42-f53a-416b-ab37-f59578bd3459",
+      "name": "When chat message received",
+      "webhookId": "565debcf-b034-47af-bff9-3978ef5ea6d0"
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a genius in football"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "94afa2fe-2027-45a6-aec4-f056a70db6b5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "gpt-oss:20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "1d469d03-5e6a-4f27-ab09-44b0592accb6",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "nDYlAeP9ECerEH4a",
+          "name": "Ollama account 12"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "3021ca90-ace2-4431-a21c-97f404a00088",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-09-29T09:36:11.889Z",
+      "createdAt": "2025-09-29T09:36:11.889Z",
+      "role": "workflow:owner",
+      "workflowId": "3GcP2XHCha8aDSDJ",
+      "projectId": "foZBwYyTv59bWCvx",
+      "project": {
+        "updatedAt": "2025-09-24T07:24:55.026Z",
+        "createdAt": "2025-09-24T07:21:17.817Z",
+        "id": "foZBwYyTv59bWCvx",
+        "name": "Yuvin Mahawatta <yuvin.mahawatta@softlogic.lk>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-09-24T07:21:17.819Z",
+            "createdAt": "2025-09-24T07:21:17.819Z",
+            "userId": "4591fb8e-9c96-40dd-9382-f84cd44964c0",
+            "projectId": "foZBwYyTv59bWCvx",
+            "user": {
+              "updatedAt": "2025-12-16T06:17:12.761Z",
+              "createdAt": "2025-09-24T07:21:17.815Z",
+              "id": "4591fb8e-9c96-40dd-9382-f84cd44964c0",
+              "email": "yuvin.mahawatta@softlogic.lk",
+              "firstName": "Yuvin",
+              "lastName": "Mahawatta",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-11T18:49:52.990Z",
+                "personalization_survey_n8n_version": "1.107.3"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "bDGZCbOt6LcjLsM3",
+                "userActivated": true,
+                "userActivatedAt": 1761197996295,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 2,
+                  "lastShownAt": 1765865830225
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-16",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
