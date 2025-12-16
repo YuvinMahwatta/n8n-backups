@@ -1,0 +1,805 @@
+{
+  "updatedAt": "2025-09-26T06:17:37.000Z",
+  "createdAt": "2025-09-24T10:02:50.119Z",
+  "id": "mZtthacryPOXZ9Bj",
+  "name": "Pending report Automation",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtHour": 12,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        -32
+      ],
+      "id": "9a4f4159-eb3c-48a1-936a-ff23f60d847f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3abc99d0-f97b-4d24-9241-fb22db29c79c",
+              "leftValue": "={{ $json.LendInsName }}",
+              "rightValue": "Commercial Bank of Ceylon PLC",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "afa59378-6b77-4fa8-b6b3-f91b1173abdb",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "Pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        -32
+      ],
+      "id": "9ec62ffe-fc1a-4fc9-9479-9b89c18e7d2b",
+      "name": "Filter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "toFile",
+        "fileFormat": "xlsx",
+        "binaryPropertyName": "file1",
+        "options": {
+          "fileName": "Pending file.xlsx"
+        }
+      },
+      "name": "Spreadsheet File",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        656,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "73f0d060-6c3c-441c-8f26-05eca855a3ac",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        288
+      ],
+      "id": "14c72dde-7f3c-4fbb-bd48-92e00073aeea",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date();\nconst year = today.getFullYear();\nconst month = today.getMonth() + 1;\n\nconst firstDay = `${year}-${String(month).padStart(2, '0')}-01`;\nconst lastDayNumber = new Date(year, month, 0).getDate();\nconst lastDay = `${year}-${String(month).padStart(2, '0')}-${lastDayNumber}`;\n\nreturn [\n  {\n    firstDay,\n    lastDay,\n    month\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "77d1bd15-8e3c-4a57-8d4f-7fa59f9c298b",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "exec RPT_DTAP_CompletedbyTransactionDate '{{ $json.firstDay }}'  , '{{ $json.lastDay }}'"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -32
+      ],
+      "id": "d82fd3dc-b01c-49ab-b665-f0c1dcccf2c1",
+      "name": "Microsoft SQL1",
+      "credentials": {
+        "microsoftSql": {
+          "id": "HPvkYeV2r4r8J3xn",
+          "name": "Microsoft SQL account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3abc99d0-f97b-4d24-9241-fb22db29c79c",
+              "leftValue": "={{ $json.LendingInstitution }}",
+              "rightValue": "Commercial Bank of Ceylon PLC",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        -32
+      ],
+      "id": "16ddd5da-9f50-4563-8295-c95962cc75e3",
+      "name": "Filter1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "toFile",
+        "fileFormat": "xlsx",
+        "binaryPropertyName": "file2",
+        "options": {
+          "fileName": "Refund file.xlsx"
+        }
+      },
+      "name": "Spreadsheet File3",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        1552,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "e1b696cf-d123-463f-8162-8932c9425e3b",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "exec SP_LU_Refund_Report '{{ $('Code1').item.json.firstDay }}'  , '{{ $('Code1').item.json.lastDay }}' , 1513"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        -32
+      ],
+      "id": "75df113e-6d98-46ef-acd0-e371d7dccf03",
+      "name": "Microsoft SQL",
+      "credentials": {
+        "microsoftSql": {
+          "id": "HPvkYeV2r4r8J3xn",
+          "name": "Microsoft SQL account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileName": "Pending file.xlsx",
+        "parentId": "01I5GXJB5OE7KRZD5J3RBZVZ6PLTFWRYYJ",
+        "binaryData": true,
+        "binaryPropertyName": "file1"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -32
+      ],
+      "id": "7481d572-69dd-494f-8a77-c51a33a600e2",
+      "name": "Upload a file",
+      "alwaysOutputData": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "g3BcpQrJL2OdA0Vj",
+          "name": "Thejana Fernando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "search",
+        "query": "Pending & Refund report Automation- Commercial Bank of Ceylon PLC"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -352
+      ],
+      "id": "fd069fdc-92d0-40bb-9941-2c4a9e002d76",
+      "name": "Search a folder",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "HfPxszpTkeMXHW3G",
+          "name": "Alexa.Yuvin"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "toRecipients": "Sayuri.Sathsarani@softlogiccapital.lk",
+        "subject": "=Refund and Pending Reports – Commercial Bank of Ceylon PLC ({{ $('Code1').item.json.firstDay }},{{ $('Code1').item.json.lastDay }})",
+        "bodyContent": "=Hi Team,\nPlease find attached the Refund and Pending Reports of Commercial Bank of Ceylon PLC for the month of {{ $('Code1').item.json.month}}, 2025.\nPolicy cancellation details of the previous month.\nList of pending policies along with reasons for pending.",
+        "additionalFields": {
+          "attachments": {
+            "attachments": [
+              {},
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3344,
+        -128
+      ],
+      "id": "6ff6e3ed-7878-412a-9e25-115b9c385152",
+      "name": "Send a message1",
+      "webhookId": "dd348a4f-0ef7-4f2f-9f42-4dc5574d96cb",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "3LfY7AoNAh1V8rUb",
+          "name": "Microsoft Outlook account 17"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "createdBy.application.id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        -32
+      ],
+      "id": "76b397f4-afae-42e0-a0b7-33bc439a90c8",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "52924acb-4df1-4c7d-91b1-8d46e204dbdf",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2672,
+        -32
+      ],
+      "id": "e8987eb1-852e-401f-9c23-d0e28ad6c80d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "toRecipients": "Sayuri.Sathsarani@softlogiccapital.lk",
+        "subject": "=Refund and Pending Reports – Commercial Bank of Ceylon PLC ({{ $('Code1').item.json.firstDay }},{{ $('Code1').item.json.lastDay }})",
+        "bodyContent": "=Hi Team,\nPlease find attached the Refund and Pending Reports of Commercial Bank of Ceylon PLC for the month of {{$('Code1').item.json.month}}, 2025.\nPolicy cancellation details of the previous month.\nList of pending policies along with reasons for pending.",
+        "additionalFields": {
+          "attachments": {
+            "attachments": [
+              {
+                "binaryPropertyName": "data"
+              },
+              {
+                "binaryPropertyName": "data2"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3344,
+        64
+      ],
+      "id": "949ba73a-2350-4e8a-b352-ad353d2b58c7",
+      "name": "Send a message2",
+      "webhookId": "dd348a4f-0ef7-4f2f-9f42-4dc5574d96cb",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "3LfY7AoNAh1V8rUb",
+          "name": "Microsoft Outlook account 17"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $('Upload a file').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        64
+      ],
+      "id": "d148b4b6-64dc-4c7f-80eb-ae3598051e8e",
+      "name": "Download a file2",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "g3BcpQrJL2OdA0Vj",
+          "name": "Thejana Fernando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        -128
+      ],
+      "id": "13ac3b55-6456-4b3d-826e-77a2e367e14f",
+      "name": "Download a file4",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "g3BcpQrJL2OdA0Vj",
+          "name": "Thejana Fernando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $('Upload a file').item.json.id }}",
+        "binaryPropertyName": "data2"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        64
+      ],
+      "id": "6cacfb70-e525-4baf-8b08-35fa1c0d7d7c",
+      "name": "Download a file",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "g3BcpQrJL2OdA0Vj",
+          "name": "Thejana Fernando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "fileId": "01I5GXJB5OE7KRZD5J3RBZVZ6PLTFWRYYJ"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        -128
+      ],
+      "id": "8d011dda-513e-4e17-90c8-0dbd11738298",
+      "name": "Get a file",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "g3BcpQrJL2OdA0Vj",
+          "name": "Thejana Fernando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileName": "Refund file.xlsx",
+        "parentId": "01I5GXJB5OE7KRZD5J3RBZVZ6PLTFWRYYJ",
+        "binaryData": true,
+        "binaryPropertyName": "file2"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        1776,
+        -32
+      ],
+      "id": "1ce0309e-493f-4e9f-adac-7e14add25347",
+      "name": "Upload a file1",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "g3BcpQrJL2OdA0Vj",
+          "name": "Thejana Fernando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "fileId": "01I5GXJB5OE7KRZD5J3RBZVZ6PLTFWRYYJ"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        2224,
+        -32
+      ],
+      "id": "abfd27da-6efc-4bf8-be87-7f50116dc56d",
+      "name": "Get a file1",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "HfPxszpTkeMXHW3G",
+          "name": "Alexa.Yuvin"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        -32
+      ],
+      "id": "b8c17a48-5037-46e1-8f08-5844d9e4d147",
+      "name": "Wait",
+      "webhookId": "31ed11c0-6198-4657-9372-159c7be06eca"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Spreadsheet File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spreadsheet File": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Spreadsheet File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spreadsheet File3": {
+      "main": [
+        [
+          {
+            "node": "Upload a file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        []
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download a file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message2": {
+      "main": [
+        []
+      ]
+    },
+    "Download a file2": {
+      "main": [
+        [
+          {
+            "node": "Download a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download a file4": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download a file": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Download a file4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get a file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "43afe572-009c-4b2e-b27e-645e2618c260",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-09-24T10:02:50.122Z",
+      "createdAt": "2025-09-24T10:02:50.122Z",
+      "role": "workflow:owner",
+      "workflowId": "mZtthacryPOXZ9Bj",
+      "projectId": "foZBwYyTv59bWCvx",
+      "project": {
+        "updatedAt": "2025-09-24T07:24:55.026Z",
+        "createdAt": "2025-09-24T07:21:17.817Z",
+        "id": "foZBwYyTv59bWCvx",
+        "name": "Yuvin Mahawatta <yuvin.mahawatta@softlogic.lk>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-09-24T07:21:17.819Z",
+            "createdAt": "2025-09-24T07:21:17.819Z",
+            "userId": "4591fb8e-9c96-40dd-9382-f84cd44964c0",
+            "projectId": "foZBwYyTv59bWCvx",
+            "user": {
+              "updatedAt": "2025-12-16T06:17:12.761Z",
+              "createdAt": "2025-09-24T07:21:17.815Z",
+              "id": "4591fb8e-9c96-40dd-9382-f84cd44964c0",
+              "email": "yuvin.mahawatta@softlogic.lk",
+              "firstName": "Yuvin",
+              "lastName": "Mahawatta",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-09-11T18:49:52.990Z",
+                "personalization_survey_n8n_version": "1.107.3"
+              },
+              "settings": {
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "bDGZCbOt6LcjLsM3",
+                "userActivated": true,
+                "userActivatedAt": 1761197996295,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 2,
+                  "lastShownAt": 1765865830225
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-16",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
